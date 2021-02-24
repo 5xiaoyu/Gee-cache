@@ -34,6 +34,8 @@ func New(maxBytes int64, onEvicted func (string ,Value)) *Cache {
 
 //  Add adds a value to the cache.
 func (c *Cache) Add(key string, value Value) {
+	// todo 如果value 值大于maxBytes如何处理
+
 	// 如果键存在，更新对应的节点值，并将节点移动到最前
 	if ele, ok := c.cache[key]; ok {
 		c.ll.MoveToFront(ele)
@@ -65,7 +67,7 @@ func (c *Cache) Get(key string) (value Value, ok bool) {
 // remove the oldest item
 // 缓存淘汰 最近做少访问的 节点
 func (c *Cache) RemoveOldest() {
-	ele := c.ll.Back()
+	ele := c.ll.Back() // 返回尾节点
 	if ele != nil {
 		c.ll.Remove(ele)
 		kv := ele.Value.(*entry)
